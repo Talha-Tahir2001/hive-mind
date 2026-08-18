@@ -1,0 +1,9 @@
+{
+  "mcp": {
+    "cockroachdb-docs": {
+      "type": "remote",
+      "url": "https://cockroachdb.mcp.kapa.ai",
+      "enabled": true
+    }
+  }
+}

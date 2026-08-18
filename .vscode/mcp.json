@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"my-mcp-server-376f21af": {
+			"url": "https://cockroachlabs.cloud/mcp",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
