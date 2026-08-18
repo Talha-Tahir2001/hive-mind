@@ -11,6 +11,7 @@ import {
   semanticSearchMemories,
   getMemories,
   logMemoryRead,
+  memoryExists,
 } from "@/lib/memory/queries";
 import type {
   AgentMemoryOutput,
@@ -202,7 +203,7 @@ export async function executeAgent(params: {
     const rawResponse = await invokeLLM({
       systemPrompt,
       messages: [{ role: "user", content: userMessage }],
-      maxTokens: 4096,
+      maxTokens: 2048,
       temperature: 0.3,
     });
 
@@ -220,13 +221,28 @@ export async function executeAgent(params: {
 
     for (const parsed of parsedMemories) {
       // Resolve parent_memory_id
-      let parentId: string | undefined = parsed.parent_memory_id ?? undefined;
+      let parentId: string | undefined;
 
-      // If not set explicitly, use the hint or auto-detect from current run
+      // Models occasionally invent a parent_memory_id. Validate anything the
+      // model supplies first so one bad UUID can't reject the whole step.
+      if (parsed.parent_memory_id) {
+        if (await memoryExists(parsed.parent_memory_id)) {
+          parentId = parsed.parent_memory_id;
+        } else {
+          console.warn(
+            `[Executor] Dropping invalid parent_memory_id ${parsed.parent_memory_id} (memory does not exist)`
+          );
+        }
+      }
+
+      // Fall back to the orchestrator hint
       if (!parentId && parentMemoryHint) {
         parentId = parentMemoryHint;
-      } else if (!parentId && currentRunMemories.length > 0) {
-        // Auto-link to the most recent memory from another agent in this run
+      }
+
+      // Fall back to auto-linking to the most recent memory from another
+      // agent in this run, preserving lineage when the model omits it.
+      if (!parentId && currentRunMemories.length > 0) {
         const fromOtherAgent = currentRunMemories.filter(
           (m) => m.agentType !== agentType
         );
