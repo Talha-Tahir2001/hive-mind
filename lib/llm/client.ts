@@ -137,11 +137,11 @@ export async function invokeLLM(params: {
     },
     body: JSON.stringify({
       model,
-      max_tokens: params.maxTokens ?? 4096,
+      max_tokens: params.maxTokens ?? 2048,
       temperature: params.temperature ?? 0.3,
       messages: allMessages,
     }),
-    timeoutMs: 120_000,
+    timeoutMs: 240_000,
     maxAttempts: 3,
   });
 
