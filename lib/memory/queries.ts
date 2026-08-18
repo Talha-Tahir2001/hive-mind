@@ -251,6 +251,17 @@ export async function getMemory(id: string): Promise<Memory | null> {
   );
 }
 
+// Check whether a memory id exists. Used to validate model-supplied
+// parent_memory_id values before insert (the FK would otherwise reject
+// the whole step).
+export async function memoryExists(id: string): Promise<boolean> {
+  const row = await queryOne<{ exists: boolean }>(
+    `SELECT EXISTS(SELECT 1 FROM memories WHERE id = $1) AS exists`,
+    [id]
+  );
+  return row?.exists ?? false;
+}
+
 // ============================================
 // SEMANTIC SEARCH
 // ============================================
