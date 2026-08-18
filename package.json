@@ -16,10 +16,14 @@
     "db:vector": "node --import tsx lib/db/apply-vector-index.ts",
     "db:setup": "node --import tsx lib/db/apply-schema.ts && node --import tsx lib/db/seed.ts && node --import tsx lib/db/apply-vector-index.ts",
     "db:test$0": "node --import tsx lib/db/test-connection.ts",
-    "pipeline:test": "node --import tsx lib/pipeline/test-pipeline.ts"
+    "pipeline:test": "node --import tsx lib/pipeline/test-pipeline.ts",
+    "lambda:build": "node scripts/build-lambda.mjs",
+    "lambda:test-local": "node scripts/test-lambda-local.mjs",
+    "deploy:lambda": "node scripts/deploy-lambda.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1110.0",
+    "@aws-sdk/client-lambda": "^3.1112.0",
     "@aws-sdk/client-s3": "^3.1110.0",
     "@aws-sdk/s3-request-presigner": "^3.1111.0",
     "@base-ui/react": "^1.7.0",
@@ -47,6 +51,8 @@
     "@types/pg": "^8.21.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "archiver": "^8.0.0",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "prettier": "^3.8.3",
