@@ -1,8 +1,18 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./typeset.css";
 
 @custom-variant dark (&:is(.dark *));
+
+.typeset-docs {
+  --typeset-font-body: var(--font-ibm-plex-sans);
+  --typeset-font-heading: var(--font-oxanium);
+  --typeset-font-mono: var(--font-noto-serif);
+  --typeset-size: 16px;
+  --typeset-leading: 1.6;
+  --typeset-flow: 1em;
+}
 
 :root {
     --background: oklch(1 0 0);
